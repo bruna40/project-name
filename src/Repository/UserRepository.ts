@@ -16,4 +16,20 @@ export class UserRepository {
   async getUserByEmail(email: string) {
     return this.users.find((user) => user.email === email) || null;
   }
+
+  async findUserById(id: string, dataUserUpdate: Partial<UserEntity>) {
+    const user = this.users.find((user) => user.id === id) || null;
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    Object.entries(dataUserUpdate).forEach(([key, value]) => {
+      if (key === 'id') {
+        return;
+      }
+      user[key] = value;
+      return user;
+    });
+  }
 }
