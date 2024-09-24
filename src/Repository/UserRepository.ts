@@ -25,11 +25,23 @@ export class UserRepository {
     }
 
     Object.entries(dataUserUpdate).forEach(([key, value]) => {
-      if (key === 'id') {
-        return;
+      if (key !== 'id') {
+        user[key] = value;
       }
-      user[key] = value;
+
       return user;
     });
+  }
+
+  async softDelete(id: string) {
+    const user = this.users.find((user) => user.id === id) || null;
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    user.deletedAt = new Date();
+
+    return user;
   }
 }
